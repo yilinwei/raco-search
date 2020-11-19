@@ -15,8 +15,35 @@
 
 #lang racket
 
+(require raco/command-name
+         "search.rkt"
+         "index.rkt"
+         "format.rkt"
+         levenshtein)
+
+(when (current-command-name)
+  (define-values (search-term num-results)
+    (command-line
+     #:program (short-program+command-name)
+     #:args (search-term (num-results 10))
+     (values search-term num-results)))
+
+  (define results (search
+                   (curry levenshtein search-term)
+                   plt-search-data
+                   num-results))
+  (for
+      ([result (in-list results)])
+    (displayln (~e result))))
+
 (module+ test
   (require rackunit
            (for-syntax "js.rkt"))
   (include/reader "test.js" read-syntax)
-  (check-equal? 42 x))
+  (check-equal? 42 x)
+  (check-true (pair?
+               (search
+                (curry levenshtein
+                       "set!")
+                plt-search-data
+                1))))

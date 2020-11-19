@@ -1,6 +1,8 @@
 #lang info
 
-(define collection "search-cli")
+(define collection "raco-search")
 (define version "0.1")
-(define deps '("base"))
+(define deps '("base" "levenshtein"))
 (define pre-install-collection "installer.rkt")
+(define raco-commands
+  '(("search" raco-search/main "search" 10)))
