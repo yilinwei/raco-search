@@ -1,0 +1,11 @@
+image: nixos/latest
+packages:
+  - nixos.racket
+sources:
+  - https://git.sr.ht/~yilin/search-cli
+tasks:
+  - build: |
+      cd search-cli
+      raco pkg install --auto
+  - test: |
+      raco test search-cli
